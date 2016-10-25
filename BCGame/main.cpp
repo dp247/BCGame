@@ -10,7 +10,6 @@ int32 currentGuess = 0;
 void gameIntroduction()
 {
     //Print introduction/rules of the game
-    //qawdawd
     std::cout << "Welcome to Bulls & Cows, an original isogram game!\n";
     std::cout << "In this game, you must guess the " << BCGame.getHiddenWordLength() << " letter word.\n";
     std::cout << "The word is an isogram, meaning it has no repeating letters.\n";
