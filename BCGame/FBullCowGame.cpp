@@ -1,28 +1,38 @@
+//FBullCowGame.cpp
+
+//Includes
 #include "FBullCowGame.h"
 
+//Constructor - calls reset to reset game variables
 FBullCowGame::FBullCowGame()
 {
     reset();
 }
 
+//This function resets game variables to their default states.
+//TODO - add a function to load in words from a file, select one and set it here
 void FBullCowGame::reset()
 {
     MyCurrentTry = 1;
     MyMaxTries = 8;
+
+    bGameWon = false;
 
     const FString HIDDEN_WORD = "planet";
     MyHiddenWord = HIDDEN_WORD;
     return;
 }
 
-//recieves a valid guess, increments and returns count
-FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
+//This function takes in a guess and checks it for bulls and cows.
+FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 {
     //Increment the try count
     MyCurrentTry++;
 
     //setup return variable
     FBullCowCount BullCowCount;
+
+    //set hidden word length to zero
     int32 HiddenWordLength = 0;
 
     //Get the word's length
@@ -54,25 +64,35 @@ FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
         }
     }
 
-    //compare letters against hidden word
+    //If the number of bulls (letters in the right places) is equivalent to
+    //the length of the word, the word is correct, so set the bGameWon boolean
+    //to true. If not, it is false.
+    if (BullCowCount.Bulls == HiddenWordLength)
+    {
+        bGameWon = true;
+    }
+    else
+    {
+        bGameWon = false;
+    }
 
     return BullCowCount;
 }
 
+//Getter function for max tries
 int32 FBullCowGame::getMaxTries() const { return MyMaxTries; }
 
+//Getter function for hidden word length
 int32 FBullCowGame::getHiddenWordLength() const { return MyHiddenWord.length(); }
 
-int32 FBullCowGame::getCurrentTry()
-{
-    return MyCurrentTry;
-}
+//Getter function for the game won boolean
+bool FBullCowGame::isGameWon() const { return bGameWon; }
 
-bool FBullCowGame::isGameWon() const
-{
-    return false;
-}
+//Getter function for the current try number
+int32 FBullCowGame::getCurrentTry() { return MyCurrentTry; }
 
+//This functions checks a guess' validity by setting an appropriate
+//status
 EGuessStatus FBullCowGame::checkGuessValidity(FString Guess) const
 {
     //if guess is not isogram
