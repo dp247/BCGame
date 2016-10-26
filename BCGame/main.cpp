@@ -15,6 +15,9 @@ FBullCowGame BCGame;
 //set currentGuess to zero
 int32 currentGuess = 0;
 
+//set the number of games won
+int32 gamesWonCounter = 0;
+
 //This function prints introductary lines when the game is first launched
 void gameIntroduction()
 {
@@ -22,6 +25,37 @@ void gameIntroduction()
     std::cout << "Welcome to Bulls & Cows, an original isogram game!\n";
     std::cout << "In this game, you must guess the " << BCGame.getHiddenWordLength() << " letter word.\n";
     std::cout << "The word is an isogram, meaning it has no repeating letters.\n";
+}
+
+//This function displays the number of games won at the end of the game (called in
+//printGameSummary()), incrementing the gamesWonCount if the last game has just been won
+int32 DisplayGamesWon(int32 gameCounter)
+{
+    if (BCGame.isGameWon())
+    {
+        gamesWonCounter++;
+    }
+
+    std::cout << "You have won " << gamesWonCounter << " out of " <<
+        gameCounter << " games." << std::endl;
+
+    return gamesWonCounter;
+}
+
+//This function prints the game summary (if the player wins or loses)
+void printGameSummary(int32 gameCounter)
+{
+    if (BCGame.isGameWon())
+    {
+        std::cout << "\nCongratulations, you guess correctly!" << std::endl;
+        DisplayGamesWon(gameCounter);
+    }
+
+    else
+    {
+        std::cout << "\nSorry, you ran out of guesses.. better luck next time!" << std::endl;
+        DisplayGamesWon(gameCounter);
+    }
 }
 
 //This function runs before playGame() and keeps track of how many games the user
@@ -81,7 +115,7 @@ FText GetValidGuess()
 }
 
 //This function handles the running of each game round
-void playGame()
+void playGame(int32 gameCounter)
 {
     //reset the game
     BCGame.reset();
@@ -101,9 +135,11 @@ void playGame()
         //Display the number of bulls and cows
         std::cout << "Bulls = " << BullCowCount.Bulls << ".\n";
         std::cout << "Cows = " << BullCowCount.Cows << ".\n";
-
-        //TODO Add a game summary
     }
+
+    //Print the game summary, passing the games won and total games count
+    printGameSummary(gameCounter);
+    return;
 }
 
 //This function is called at the end of each game and asks the user if they
@@ -112,7 +148,7 @@ void playGame()
 bool askToPlayAgain()
 {
     //Ask the user if they want to play again
-    std::cout << "\n\nDo you want to play again? \nAnswer (Y/N): ";
+    std::cout << "\nDo you want to play again? \nAnswer (Y/N): ";
 
     //New string for a response
     FText Response = "";
@@ -152,7 +188,7 @@ int main()
     //while true, the user will play again
     bool bPlayAgain = true;
 
-    //Integer that stores the number of games played
+    //integer that stores the number of games played
     int32 gameCounter = 0;
 
     //call to gameIntroduction() to print instructions at the top of the screen
@@ -167,7 +203,7 @@ int main()
         gameCounter = DisplayGameNumber(gameCounter);
 
         //call to playGame() to play the game
-        playGame();
+        playGame(gameCounter);
 
         //ask the user if they would like to play again and set the bool
         //to the returned value. This is kind of obsolete since the exits

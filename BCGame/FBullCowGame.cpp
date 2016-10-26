@@ -14,7 +14,7 @@ FBullCowGame::FBullCowGame()
 void FBullCowGame::reset()
 {
     MyCurrentTry = 1;
-    MyMaxTries = 8;
+    MyMaxTries = 10;
 
     bGameWon = false;
 
