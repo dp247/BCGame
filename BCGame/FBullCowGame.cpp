@@ -2,7 +2,13 @@
 
 //Includes
 #include "FBullCowGame.h"
+
 #include <map>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+#include <time.h>
 
 //replace std::map with TMap
 #define TMap std::map
@@ -13,18 +19,80 @@ FBullCowGame::FBullCowGame()
     reset();
 }
 
+//This function returns a randomly generated integer
+unsigned int FBullCowGame::randomInt(unsigned int min, unsigned int max)
+{
+    return (rand() % ((max + 1) - min) + min);
+}
+
+//This function loads in words from a text file into a vector, picks a random one
+//then returns it.
+FString FBullCowGame::getWord()
+{
+    //Declare the word file name and location
+    std::string wordFile = "./isograms.txt";
+
+    //Open the file
+    std::ifstream fileIn(wordFile.c_str());
+
+    //Throw an error if file cannot be loaded
+    if (!fileIn)
+    {
+        std::cout << "err: Failed To Load (" << wordFile << ")\n";
+    }
+
+    //create a new vector of strings to hold each word
+    std::vector<std::string> words;
+
+    //create a new string variable to read a line
+    std::string line;
+
+    //get each line of the file
+    while (getline(fileIn, line))
+    {
+        //put each line into the words vector
+        words.push_back(line);
+
+        //clear the line variable ready for the next take
+        line.clear();
+    }
+
+    //Stop reading the file
+    fileIn.close();
+
+    //Check if the words list was populated
+    if (words.empty())
+    {
+        std::cout << "err: No Words Found!\n";
+    }
+
+    //Seed the random number generator
+    srand(static_cast<unsigned int>(time(NULL)));
+
+    //Generate random number
+    unsigned int randomNumber = randomInt(0, words.size() - 1);
+
+    //Using the random number, set the word
+    FString word = words[randomNumber];
+
+    //return the word
+    return word;
+}
+
 //This function resets game variables to their default states.
-//TODO - add a function to load in words from a file, select one and set it here
 void FBullCowGame::reset()
 {
+    //Reset the try count and game win status
     MyCurrentTry = 1;
-
-    //MyMaxTries = 10;
-
     bGameWon = false;
 
-    const FString HIDDEN_WORD = "planet";
+    //Get a new word and set it to a variable
+    const FString HIDDEN_WORD = getWord();
     MyHiddenWord = HIDDEN_WORD;
+
+    //Debug code to print the hidden word
+    //std::cout << "\n\nThe hidden word is: " << MyHiddenWord << "\n\n";
+
     return;
 }
 
@@ -118,6 +186,7 @@ bool FBullCowGame::isIsogram(FString Guess) const
     return true;
 }
 
+//Function that checks if the parameter is all lowercase
 bool FBullCowGame::isLowercase(FString Guess) const
 {
     //for the letters in the guess
@@ -135,8 +204,11 @@ bool FBullCowGame::isLowercase(FString Guess) const
 //Getter function for max tries
 int32 FBullCowGame::getMaxTries() const
 {
+    //This map stores the word length to max tries. For example: a word that is 3
+    //letters long would give the user 4 tries to solve it
     TMap<int32, int32> WordLengthToMaxTries{ {3,4}, {4,7}, {5,10}, {6,16}, {7,21}, {8,28} };
 
+    //return the number of tries based on the word length
     return WordLengthToMaxTries[MyHiddenWord.length()];
 }
 
