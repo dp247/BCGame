@@ -23,8 +23,9 @@ void gameIntroduction()
 {
     //Print introduction/rules of the game
     std::cout << "Welcome to Bulls & Cows, an original isogram game!\n";
-    std::cout << "In this game, you must guess the " << BCGame.getHiddenWordLength() << " letter word.\n";
+    std::cout << "A word from a list of 150 has been chosen for you to guess!\n";
     std::cout << "The word is an isogram, meaning it has no repeating letters.\n";
+    std::cout << "The number of tries you get depends on the word length. Good luck!\n";
 }
 
 //This function displays the number of games won at the end of the game (called in
@@ -201,6 +202,9 @@ int main()
         //done, set the incremented value to be the new value (as it has
         //been returned)
         gameCounter = DisplayGameNumber(gameCounter);
+
+        //Print out the length of the word (useful in multiple rounds)
+        std::cout << "In this game, you must guess the " << BCGame.getHiddenWordLength() << " letter word.\n";
 
         //call to playGame() to play the game
         playGame(gameCounter);

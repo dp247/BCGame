@@ -38,6 +38,8 @@ private:
 
                                         //isogram
     bool isLowercase(FString) const;
+    FString getWord();
+    unsigned int randomInt(unsigned int min, unsigned int max);
 
 public:
     FBullCowGame();                     //constructor
