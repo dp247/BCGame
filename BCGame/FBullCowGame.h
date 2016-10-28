@@ -31,9 +31,14 @@ class FBullCowGame
 {
 private:
     int32 MyCurrentTry;                 //current try number
-    int32 MyMaxTries;                   //max tries number
     FString MyHiddenWord;               //string that stores hidden word
     bool bGameWon;                      //boolean that evaluates if game is won
+
+    bool isIsogram(FString) const;      //returns true if the passed parameter is an
+
+                                        //isogram
+    bool isLowercase(FString) const;
+
 public:
     FBullCowGame();                     //constructor
 

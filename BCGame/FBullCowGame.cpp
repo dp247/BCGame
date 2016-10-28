@@ -2,6 +2,10 @@
 
 //Includes
 #include "FBullCowGame.h"
+#include <map>
+
+//replace std::map with TMap
+#define TMap std::map
 
 //Constructor - calls reset to reset game variables
 FBullCowGame::FBullCowGame()
@@ -14,7 +18,8 @@ FBullCowGame::FBullCowGame()
 void FBullCowGame::reset()
 {
     MyCurrentTry = 1;
-    MyMaxTries = 10;
+
+    //MyMaxTries = 10;
 
     bGameWon = false;
 
@@ -79,8 +84,61 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
     return BullCowCount;
 }
 
+//Function that checks if the parameter is an isogram or not
+bool FBullCowGame::isIsogram(FString Guess) const
+{
+    //If the guess is 0 or 1 letters long, it is an isogram, so return true
+    if (Guess.length() <= 1)
+    {
+        return true;
+    }
+
+    //Setup the map
+    TMap <char, bool> LetterSeen;
+
+    //for all letters of the guess
+    for (auto Letter : Guess)
+    {
+        //Handle mixed case by converting all letters to lowercase
+        Letter = tolower(Letter);
+
+        //If the letter is in the map, the guess is not an isogram
+        if (LetterSeen[Letter])
+        {
+            return false;
+        }
+
+        //Else, add the letter to the map
+        else
+        {
+            LetterSeen[Letter] = true;
+        }
+    }
+
+    return true;
+}
+
+bool FBullCowGame::isLowercase(FString Guess) const
+{
+    //for the letters in the guess
+    for (auto Letter : Guess)
+    {
+        if (!islower(Letter))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 //Getter function for max tries
-int32 FBullCowGame::getMaxTries() const { return MyMaxTries; }
+int32 FBullCowGame::getMaxTries() const
+{
+    TMap<int32, int32> WordLengthToMaxTries{ {3,4}, {4,7}, {5,10}, {6,16}, {7,21}, {8,28} };
+
+    return WordLengthToMaxTries[MyHiddenWord.length()];
+}
 
 //Getter function for hidden word length
 int32 FBullCowGame::getHiddenWordLength() const { return MyHiddenWord.length(); }
@@ -95,14 +153,14 @@ int32 FBullCowGame::getCurrentTry() { return MyCurrentTry; }
 //status
 EGuessStatus FBullCowGame::checkGuessValidity(FString Guess) const
 {
-    //if guess is not isogram
-    if (false)
+    //if the guess is not an isogram
+    if (!isIsogram(Guess))
     {
         return EGuessStatus::Not_Isogram;
     }
 
     //if not all lowercase
-    else if (false)
+    else if (!isLowercase(Guess))
     {
         return EGuessStatus::Not_Lowercase;
     }
