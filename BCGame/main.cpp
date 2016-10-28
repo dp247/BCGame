@@ -83,7 +83,7 @@ FText GetValidGuess()
         currentGuess = BCGame.getCurrentTry();
 
         //get a guess from the player
-        std::cout << "\nEnter guess #" << currentGuess << ": ";
+        std::cout << "\nEnter guess " << currentGuess << " of " << BCGame.getMaxTries() << ": ";
         std::getline(std::cin, Guess);
 
         //check the guess validity and return a status
@@ -99,12 +99,12 @@ FText GetValidGuess()
 
             //If the status returned specifies it is not an isogram
         case EGuessStatus::Not_Isogram:
-            std::cout << "Please enter a valid isogram.\n ";
+            std::cout << "Isograms must not have repeating letters. Please try again.\n ";
             break;
 
             //If the status returned specifies that the guess is not lowercase
         case EGuessStatus::Not_Lowercase:
-            std::cout << "Not lowercase.\n ";
+            std::cout << "Please enter your guess in lowercase.\n ";
             break;
 
         default:
